@@ -1,0 +1,46 @@
+// https://www.prisma.io/docs/orm/prisma-schema/overview
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../src/generated/prisma" docker hittar inte rätt katalog.
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Board {
+  id    Int    @id @default(autoincrement())
+  name  String
+  notes Note[]
+}
+
+model Note {
+  id         Int       @id @default(autoincrement())
+  author_id  Int? // ? tillåter null
+  note       String?   @db.VarChar(1000)
+  x          Int       @default(100)   // startposition x
+  y          Int       @default(100)   // startposition y
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @default(now()) @db.Timestamp(6)
+  color      String?   @default("#ffffff") @db.VarChar(20)
+  boardId    Int?      @map("board_id")      // NYTT: board-kolumn
+  board      Board?    @relation(fields: [boardId], references: [id])
+  @@map("notes") // byter namnet på tabellen.
+}
+
+// i projektet skall det skapas en egen databas för användare. 
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  email     String   @unique
+  role      String   @default("user")
+  name      String?
+  password  String?
+}
+
+model Test {
+  id    Int     @id @default(autoincrement())
+  name  String
+  @@map("test")
+}

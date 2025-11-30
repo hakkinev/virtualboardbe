@@ -1,0 +1,38 @@
+// https://www.prisma.io/docs/orm/prisma-schema/overview
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../src/generated/notes-client"
+  binaryTargets = ["native", "debian-openssl-3.0.x"] // chatGTP föreslog detta för att lösa problem med Docker och OpenSSL versioner. Bygger klienten så den funkar både där jag utvecklar (Windows) och där jag kör i Docker (Debian Linux).
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Note {
+  id         Int       @id @default(autoincrement())
+  author_id  Int? // ? tillåter null
+  note       String?   @db.VarChar(1000)
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @default(now()) @db.Timestamp(6)
+
+  @@map("notes") // byter namnet på tabellen.
+}
+
+// i projektet skall det skapas en egen databas för användare. 
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  email     String   @unique
+  role      String   @default("user")
+  name      String?
+  password  String?
+}
+
+model Test {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  @@map("test")
+}

@@ -1,0 +1,19 @@
+// Prisma schema för användar-databasen (whiteboard_users)
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../generated/prisma" // <-- ändrad från user-client
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL_USERS")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  email     String   @unique
+  name      String?
+  password  String
+}
