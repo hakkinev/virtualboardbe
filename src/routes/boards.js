@@ -12,7 +12,7 @@ router.use(authorize)
 router.get('/', async (req, res) => {
     try {
         const boards = await prisma.board.findMany({
-            orderBy: { id: 'asc' }
+            orderBy: { id: 'asc' } // stiger
         })
         res.json(boards)
     } catch (error) {
