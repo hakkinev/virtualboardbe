@@ -44,3 +44,13 @@ model Test {
   name  String
   @@map("test")
 }
+
+model RefreshToken {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  token      String   @unique @db.VarChar(500)
+  issued_at  DateTime @default(now())
+  expires_at DateTime
+
+  @@map("refresh_tokens")
+}
