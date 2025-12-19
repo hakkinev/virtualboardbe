@@ -18,7 +18,7 @@ const notesRouter = require('./routes/notes')
 app.use('/notes', notesRouter)
 
 const usersRouter = require('./routes/users')
-app.use('/', usersRouter)
+app.use('/users', usersRouter)
 
 // const loginRouter = require('./routes/login')
 // app.use('/', loginRouter)
